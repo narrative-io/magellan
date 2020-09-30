@@ -8,18 +8,19 @@ import org.apache.spark.sql.catalyst.expressions._
 import org.apache.spark.sql.types._
 
 import scala.reflect._
+import scala.reflect.runtime.universe
 
 object Encoders {
 
+
   implicit def encoderForPoint: Encoder[Point] = {
     val sqlType = new PointUDT().sqlType
+
     ExpressionEncoder[Point](
-      schema = sqlType,
-      flat = true,
-      serializer = Seq(
+      objSerializer = 
         MagellanSerializer(
-          BoundReference(0, ObjectType(classOf[Point]), nullable = true), sqlType)),
-      deserializer =
+          BoundReference(0, ObjectType(classOf[Point]), nullable = true), sqlType),
+      objDeserializer =
         MagellanDeserializer(
           GetColumnByOrdinal(0, sqlType), classOf[Point]),
       clsTag = classTag[Point])
@@ -28,12 +29,10 @@ object Encoders {
   implicit def encoderForPolygon: Encoder[Polygon] = {
     val sqlType = new PolygonUDT().sqlType
     ExpressionEncoder[Polygon](
-      schema = sqlType,
-      flat = true,
-      serializer = Seq(
+      objSerializer = 
         MagellanSerializer(
-          BoundReference(0, ObjectType(classOf[Polygon]), nullable = true), sqlType)),
-      deserializer =
+          BoundReference(0, ObjectType(classOf[Polygon]), nullable = true), sqlType),
+      objDeserializer =
         MagellanDeserializer(
           GetColumnByOrdinal(0, sqlType), classOf[Polygon]),
       clsTag = classTag[Polygon])
@@ -42,12 +41,10 @@ object Encoders {
   implicit def encoderForPolyLine: Encoder[PolyLine] = {
     val sqlType = new PolyLineUDT().sqlType
     ExpressionEncoder[PolyLine](
-      schema = sqlType,
-      flat = true,
-      serializer = Seq(
+      objSerializer = 
         MagellanSerializer(
-          BoundReference(0, ObjectType(classOf[PolyLine]), nullable = true), sqlType)),
-      deserializer =
+          BoundReference(0, ObjectType(classOf[PolyLine]), nullable = true), sqlType),
+      objDeserializer =
         MagellanDeserializer(
           GetColumnByOrdinal(0, sqlType), classOf[PolyLine]),
       clsTag = classTag[PolyLine])

@@ -6,7 +6,7 @@ organization := "harsha2010"
 
 scalaVersion := "2.12.10"
 
-sparkVersion := "2.4.3"
+sparkVersion := "3.0.0"
 
 // https://github.com/scala/bug/issues/11247#issuecomment-436776758
 // scalacOptions += "-optimize"
@@ -17,7 +17,7 @@ testSparkVersion := sys.props.get("spark.testVersion").getOrElse(sparkVersion.va
 
 val testHadoopVersion = settingKey[String]("The version of Hadoop to test against.")
 
-testHadoopVersion := sys.props.getOrElse("hadoop.testVersion", "3.1.2")
+testHadoopVersion := sys.props.getOrElse("hadoop.testVersion", "3.3.0")
 
 sparkComponents := Seq("core", "sql")
 
@@ -29,13 +29,13 @@ libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "3.0.5" % "test",
   "com.vividsolutions" % "jts" % "1.13" % "test",
   "com.esri.geometry" % "esri-geometry-api" % "1.2.1",
-  "com.fasterxml.jackson.core" % "jackson-core" % "2.9.8",
-  "com.fasterxml.jackson.core" % "jackson-databind" % "2.9.8",
-  "com.fasterxml.jackson.core" % "jackson-annotations" % "2.9.8",
-  "com.fasterxml.jackson.jaxrs" % "jackson-jaxrs-base" % "2.9.8",
-  "com.fasterxml.jackson.jaxrs" % "jackson-jaxrs-json-provider" % "2.9.8",
-  "com.fasterxml.jackson.module" % "jackson-module-paranamer" % "2.9.8",
-  "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.9.8"
+  "com.fasterxml.jackson.core" % "jackson-core" % "2.11.2",
+  "com.fasterxml.jackson.core" % "jackson-databind" % "2.11.2",
+  "com.fasterxml.jackson.core" % "jackson-annotations" % "2.11.2",
+  "com.fasterxml.jackson.jaxrs" % "jackson-jaxrs-base" % "2.11.2",
+  "com.fasterxml.jackson.jaxrs" % "jackson-jaxrs-json-provider" % "2.11.2",
+  "com.fasterxml.jackson.module" % "jackson-module-paranamer" % "2.11.2",
+  "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.11.2"
 )
 // libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value % "provided"
 
