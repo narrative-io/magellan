@@ -1,3 +1,5 @@
+import sbtassembly.MergeStrategy
+
 name := "magellan"
 
 version := "1.0.7-SNAPSHOT"
@@ -44,6 +46,16 @@ libraryDependencies ++= Seq(
   "org.apache.spark" %% "spark-core" % testSparkVersion.value % "test" exclude("org.apache.hadoop", "hadoop-client"),
   "org.apache.spark" %% "spark-sql" % testSparkVersion.value % "test" exclude("org.apache.hadoop", "hadoop-client")
 )
+
+assemblyMergeStrategy in assembly :=
+  Def.setting {
+    val pf: PartialFunction[String, MergeStrategy] = {
+      case PathList(ps@_*) if Set("module-info.class").contains(ps.last) =>
+        MergeStrategy.discard
+      case x => (assemblyMergeStrategy in assembly).value(x)
+    }
+    pf
+  }.value
 
 // This is necessary because of how we explicitly specify Spark dependencies
 // for tests rather than using the sbt-spark-package plugin to provide them.
