@@ -2,6 +2,7 @@ package magellan.encoders
 
 import magellan.{Point, PolyLine, Polygon, TestSparkContext}
 import magellan.encoders.Encoders._
+import org.apache.spark.sql.Encoder
 import org.apache.spark.sql.magellan.dsl.expressions._
 import org.scalatest.FunSuite
 
@@ -10,6 +11,7 @@ class EncodersSuite extends FunSuite with TestSparkContext {
   test("point encoder") {
     val sqlContext = this.sqlContext
     import sqlContext.implicits._
+
     val points = sc.parallelize(Seq(
       Point(-1.0, -0.9),
       Point(1.1, -0.8),
@@ -62,8 +64,11 @@ class EncodersSuite extends FunSuite with TestSparkContext {
       Point(4.4, 4.4)
     )).toDS()
 
-    val joined = points.join(polygons,
-      points.col("type") within polygons.col("type"))
+    val joined = points
+      .join(
+        polygons,
+        points("shape") within polygons("shape")
+      )
 
     assert(joined.count() === 2)
   }
