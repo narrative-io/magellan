@@ -18,6 +18,8 @@ package magellan
 import com.fasterxml.jackson.annotation.{JsonIgnore, JsonProperty}
 import magellan.Shape.{area, ccw}
 import org.apache.spark.sql.types._
+import org.json4s.JsonAST.JValue
+import org.json4s.JsonDSL._
 
 /**
  * Line segment between two points.
@@ -162,6 +164,12 @@ class Line extends Shape {
     state.map(_.hashCode()).foldLeft(0)((a, b) => 31 * a + b)
   }
 
+
+  override def jsonValue: JValue =
+    ("type" -> getType()) ~
+      ("start" -> start.jsonValue) ~
+      ("end" -> end.jsonValue) ~
+      ("boundingBox", boundingBox.jsonValue())
 
   override def toString = s"Line($start, $end)"
 }

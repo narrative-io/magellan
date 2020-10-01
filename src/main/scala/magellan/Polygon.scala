@@ -25,6 +25,9 @@ import magellan.geometry.R2Loop
 import org.apache.spark.sql.catalyst.InternalRow
 import org.apache.spark.sql.catalyst.expressions.GenericInternalRow
 import org.apache.spark.sql.types._
+import org.json4s.JsonAST._
+import org.json4s.JsonDSL._
+import com.fasterxml.jackson.databind.annotation._
 
 import scala.collection.mutable.ArrayBuffer
 
@@ -40,6 +43,7 @@ import scala.collection.mutable.ArrayBuffer
  *
  */
 @SQLUserDefinedType(udt = classOf[PolygonUDT])
+@JsonDeserialize(using = classOf[PolygonDeserializer])
 class Polygon extends Shape {
 
   private var indices: Array[Int] = _
@@ -75,6 +79,13 @@ class Polygon extends Shape {
       row.getArray(7).toDoubleArray(),
       BoundingBox(row.getDouble(1), row.getDouble(2), row.getDouble(3), row.getDouble(4)))
   }
+
+  override def jsonValue: JValue =
+    ("type" -> getType()) ~
+      ("xcoordinates" -> JArray(xcoordinates.map(JDouble(_)).toList)) ~
+      ("ycoordinates" -> JArray(ycoordinates.map(JDouble(_)).toList)) ~
+      ("boundingBox", boundingBox.jsonValue()) ~
+      ("rings", JArray(indices.map(JInt(_)).toList))
 
   def serialize(): InternalRow = {
     val row = new GenericInternalRow(8)
