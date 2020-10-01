@@ -24,7 +24,7 @@ object Encoders {
         nullSafe(
           CreateNamedStruct(
             Seq(
-              "shape",
+              "type",
               MagellanSerializer(
                 BoundReference(0, ObjectType(classOf[Point]), nullable = true),
                 sqlType

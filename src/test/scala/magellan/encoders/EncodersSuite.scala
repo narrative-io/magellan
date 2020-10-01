@@ -67,7 +67,7 @@ class EncodersSuite extends FunSuite with TestSparkContext {
     val joined = points
       .join(
         polygons,
-        points("shape") within polygons("shape")
+        points("type") within polygons("type")
       )
 
     assert(joined.count() === 2)
