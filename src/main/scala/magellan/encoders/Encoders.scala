@@ -5,6 +5,7 @@ import org.apache.spark.sql.Encoder
 import org.apache.spark.sql.catalyst.analysis.GetColumnByOrdinal
 import org.apache.spark.sql.catalyst.encoders.ExpressionEncoder
 import org.apache.spark.sql.catalyst.expressions._
+import org.apache.spark.sql.catalyst._
 import org.apache.spark.sql.types._
 
 import scala.reflect._
@@ -12,26 +13,26 @@ import scala.reflect.runtime.universe
 
 object Encoders {
 
-
   implicit def encoderForPoint: Encoder[Point] = {
-    val sqlType = new PointUDT().sqlType
+
+    val udt =  new PointUDT()
+    val sqlType = udt.sqlType
 
     ExpressionEncoder[Point](
-      objSerializer = 
-        MagellanSerializer(
-          BoundReference(0, ObjectType(classOf[Point]), nullable = true), sqlType),
-      objDeserializer =
-        MagellanDeserializer(
+      objSerializer = SerializerBuildHelper.createSerializerForUserDefinedType(BoundReference(0, ObjectType(classOf[Point]), nullable = true), udt, udt.getClass)
+        ,
+      objDeserializer = MagellanDeserializer(
           GetColumnByOrdinal(0, sqlType), classOf[Point]),
       clsTag = classTag[Point])
   }
 
   implicit def encoderForPolygon: Encoder[Polygon] = {
-    val sqlType = new PolygonUDT().sqlType
+    val udt =  new PolygonUDT()
+    val sqlType = udt.sqlType
+
     ExpressionEncoder[Polygon](
       objSerializer = 
-        MagellanSerializer(
-          BoundReference(0, ObjectType(classOf[Polygon]), nullable = true), sqlType),
+        SerializerBuildHelper.createSerializerForUserDefinedType(BoundReference(0, ObjectType(classOf[Polygon]), nullable = true), udt, udt.getClass),
       objDeserializer =
         MagellanDeserializer(
           GetColumnByOrdinal(0, sqlType), classOf[Polygon]),
@@ -39,11 +40,12 @@ object Encoders {
   }
 
   implicit def encoderForPolyLine: Encoder[PolyLine] = {
-    val sqlType = new PolyLineUDT().sqlType
+    val udt =  new PolyLineUDT()
+    val sqlType = udt.sqlType
+
     ExpressionEncoder[PolyLine](
       objSerializer = 
-        MagellanSerializer(
-          BoundReference(0, ObjectType(classOf[PolyLine]), nullable = true), sqlType),
+        SerializerBuildHelper.createSerializerForUserDefinedType(BoundReference(0, ObjectType(classOf[PolyLine]), nullable = true), udt, udt.getClass),
       objDeserializer =
         MagellanDeserializer(
           GetColumnByOrdinal(0, sqlType), classOf[PolyLine]),
