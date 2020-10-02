@@ -17,7 +17,7 @@ testSparkVersion := sys.props.get("spark.testVersion").getOrElse(sparkVersion.va
 
 val testHadoopVersion = settingKey[String]("The version of Hadoop to test against.")
 
-testHadoopVersion := sys.props.getOrElse("hadoop.testVersion", "3.3.0")
+testHadoopVersion := sys.props.getOrElse("hadoop.testVersion", "3.1.2")
 
 sparkComponents := Seq("core", "sql")
 
