@@ -87,11 +87,10 @@ class Point extends Shape {
   override def getType(): Int = 1
 
   override def jsonValue: JValue =
-    ("type" -> "udt") ~
-      ("class" -> this.getClass.getName) ~
-      ("pyClass" -> "magellan.types.PointUDT") ~
+    ("type" -> getType()) ~
       ("x" -> x) ~
-      ("y" -> y)
+      ("y" -> y) ~
+      ("boundingBox", boundingBox.jsonValue())
 
   @JsonProperty
   override def boundingBox = BoundingBox(x, y, x, y)

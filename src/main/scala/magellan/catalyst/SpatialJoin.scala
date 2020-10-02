@@ -41,9 +41,9 @@ private[magellan] case class SpatialJoin(session: SparkSession)
         child
       case p@Join(
       Generate(Inline(_), _, _, _, _, _),
-      Generate(Inline(_), _, _, _, _, _), _, _) =>
+      Generate(Inline(_), _, _, _, _, _), _, _, _) =>
         p
-      case p@Join(l, r, joinType @ (Inner | LeftOuter), Some(cond)) =>
+      case p@Join(l, r, joinType @ (Inner | LeftOuter), Some(cond), _) =>
         val trigger = matchesTrigger(cond)
         if (trigger.isEmpty) p else {
           /**
@@ -100,7 +100,8 @@ private[magellan] case class SpatialJoin(session: SparkSession)
             Generate(Inline(leftIndexer), Nil, false, None, Seq(c1, r1), l),
             Generate(Inline(rightIndexer), Nil, false, None, Seq(c2, r2), r),
             joinType,
-            Some(And(EqualTo(c1, c2), transformedCondition)))
+            Some(And(EqualTo(c1, c2), transformedCondition)), 
+            JoinHint.NONE)
 
           Project(p.outputSet.toSeq, join)
         }

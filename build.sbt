@@ -1,3 +1,5 @@
+import sbtassembly.MergeStrategy
+
 name := "magellan"
 
 version := "1.0.7-SNAPSHOT"
@@ -6,7 +8,7 @@ organization := "harsha2010"
 
 scalaVersion := "2.12.10"
 
-sparkVersion := "2.4.3"
+sparkVersion := "3.0.0"
 
 // https://github.com/scala/bug/issues/11247#issuecomment-436776758
 // scalacOptions += "-optimize"
@@ -29,13 +31,13 @@ libraryDependencies ++= Seq(
   "org.scalatest" %% "scalatest" % "3.0.5" % "test",
   "com.vividsolutions" % "jts" % "1.13" % "test",
   "com.esri.geometry" % "esri-geometry-api" % "1.2.1",
-  "com.fasterxml.jackson.core" % "jackson-core" % "2.9.8",
-  "com.fasterxml.jackson.core" % "jackson-databind" % "2.9.8",
-  "com.fasterxml.jackson.core" % "jackson-annotations" % "2.9.8",
-  "com.fasterxml.jackson.jaxrs" % "jackson-jaxrs-base" % "2.9.8",
-  "com.fasterxml.jackson.jaxrs" % "jackson-jaxrs-json-provider" % "2.9.8",
-  "com.fasterxml.jackson.module" % "jackson-module-paranamer" % "2.9.8",
-  "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.9.8"
+  "com.fasterxml.jackson.core" % "jackson-core" % "2.11.2",
+  "com.fasterxml.jackson.core" % "jackson-databind" % "2.11.2",
+  "com.fasterxml.jackson.core" % "jackson-annotations" % "2.11.2",
+  "com.fasterxml.jackson.jaxrs" % "jackson-jaxrs-base" % "2.11.2",
+  "com.fasterxml.jackson.jaxrs" % "jackson-jaxrs-json-provider" % "2.11.2",
+  "com.fasterxml.jackson.module" % "jackson-module-paranamer" % "2.11.2",
+  "com.fasterxml.jackson.module" %% "jackson-module-scala" % "2.11.2"
 )
 // libraryDependencies += "org.scala-lang" % "scala-compiler" % scalaVersion.value % "provided"
 
@@ -44,6 +46,16 @@ libraryDependencies ++= Seq(
   "org.apache.spark" %% "spark-core" % testSparkVersion.value % "test" exclude("org.apache.hadoop", "hadoop-client"),
   "org.apache.spark" %% "spark-sql" % testSparkVersion.value % "test" exclude("org.apache.hadoop", "hadoop-client")
 )
+
+assemblyMergeStrategy in assembly :=
+  Def.setting {
+    val pf: PartialFunction[String, MergeStrategy] = {
+      case PathList(ps@_*) if Set("module-info.class").contains(ps.last) =>
+        MergeStrategy.discard
+      case x => (assemblyMergeStrategy in assembly).value(x)
+    }
+    pf
+  }.value
 
 // This is necessary because of how we explicitly specify Spark dependencies
 // for tests rather than using the sbt-spark-package plugin to provide them.

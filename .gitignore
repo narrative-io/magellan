@@ -9,3 +9,6 @@
 /project/target/
 .idea/
 .lein-deps-sum
+
+.bloop/
+.metals/

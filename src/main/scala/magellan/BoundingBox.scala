@@ -19,6 +19,8 @@ package magellan
 import magellan.Relate._
 
 import com.fasterxml.jackson.annotation.JsonProperty
+import org.json4s.JsonAST.JValue
+import org.json4s.JsonDSL._
 
 /**
  * A bounding box is an axis parallel rectangle. It is completely specified by
@@ -44,6 +46,12 @@ case class BoundingBox(xmin: Double, ymin: Double, xmax: Double, ymax: Double) {
 
   @JsonProperty
   def getYmax(): Double = ymax
+
+  def jsonValue(): JValue = 
+    ("xmin" -> xmin) ~
+    ("ymin" -> ymin) ~
+    ("xmax" -> xmax) ~
+    ("ymax" -> ymax)
 
   private [magellan] def intersects(other: BoundingBox): Boolean = {
     val BoundingBox(otherxmin, otherymin, otherxmax, otherymax) = other
