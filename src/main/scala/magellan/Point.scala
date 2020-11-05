@@ -90,7 +90,7 @@ class Point extends Shape {
     ("type" -> getType()) ~
       ("x" -> x) ~
       ("y" -> y) ~
-      ("boundingBox", boundingBox.jsonValue())
+      ("boundingBox" -> boundingBox.jsonValue())
 
   @JsonProperty
   override def boundingBox = BoundingBox(x, y, x, y)

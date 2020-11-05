@@ -169,7 +169,7 @@ class Line extends Shape {
     ("type" -> getType()) ~
       ("start" -> start.jsonValue) ~
       ("end" -> end.jsonValue) ~
-      ("boundingBox", boundingBox.jsonValue())
+      ("boundingBox" -> boundingBox.jsonValue())
 
   override def toString = s"Line($start, $end)"
 }
