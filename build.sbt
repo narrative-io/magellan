@@ -4,7 +4,6 @@ import _root_.io.narrative.build._
 scalaVersion := "2.12.11"
 
 name := "magellan"
-version := "1.0.7-SNAPSHOT"
 organization := "harsha2010"
 parallelExecution in Test := false
 licenses += "Apache-2.0" -> url("http://opensource.org/licenses/Apache-2.0")
