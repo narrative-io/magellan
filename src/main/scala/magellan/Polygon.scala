@@ -84,8 +84,8 @@ class Polygon extends Shape {
     ("type" -> getType()) ~
       ("xcoordinates" -> JArray(xcoordinates.map(JDouble(_)).toList)) ~
       ("ycoordinates" -> JArray(ycoordinates.map(JDouble(_)).toList)) ~
-      ("boundingBox", boundingBox.jsonValue()) ~
-      ("rings", JArray(indices.map(JInt(_)).toList))
+      ("boundingBox" -> boundingBox.jsonValue()) ~
+      ("rings" -> JArray(indices.map(JInt(_)).toList))
 
   def serialize(): InternalRow = {
     val row = new GenericInternalRow(8)
